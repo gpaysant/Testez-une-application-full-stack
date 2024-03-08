@@ -24,4 +24,29 @@ describe('Login spec', () => {
 
     cy.url().should('include', '/sessions')
   })
+
+  it('Bad login/password', () => {
+    cy.visit('/login')
+
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 401,
+    })
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/session',
+      },
+      []).as('session')
+
+    cy.get('input[formControlName=email]').type("yoga@studio.com")
+    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
+    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
+    cy.get('.error').should('be.visible');
+  })
+
+
+
 });
