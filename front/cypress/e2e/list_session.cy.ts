@@ -1,58 +1,7 @@
 describe('list session spec', () => {
-    beforeEach(() => {
-          cy.intercept(
-            {
-              method: 'GET',
-              url: '/api/session',
-            },
-            []).as('session')
-
-            
-        cy.intercept('GET', '/api/session', {
-            statusCode: 200,
-            body: [{
-                id: 1,
-                name: "first session",
-                description: "Learn basics",
-                date: '06/03/2024',
-                teacher_id: 1,
-                users: [2, 3],
-                createdAt: '06/03/2024',
-                updatedAt: '06/03/2024',
-            },
-            {
-                id: 2,
-                name: "Second session",
-                description: "Learn basics again",
-                date: '07/03/2024',
-                teacher_id: 1,
-                users: [2, 3],
-                createdAt: '06/03/2024',
-                updatedAt: '06/03/2024',
-            }
-            ],
-        })
-        .as('sessionRetrieved')
-
-      });
-
     it('list session admin successfull', () => {
 
-    cy.intercept('POST', '/api/auth/login', {
-        body: {
-            id: 1,
-            username: 'userName',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            admin: true
-        },
-        })
-
-
-      cy.visit('/login')
-  
-      cy.get('input[formControlName=email]').type("yoga@studio.com")
-      cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+      cy.login()
   
       cy.url().should('include', '/sessions')
       
@@ -71,21 +20,7 @@ describe('list session spec', () => {
 
     it('list session with user successfull', () => {
 
-        cy.intercept('POST', '/api/auth/login', {
-            body: {
-                id: 1,
-                username: 'userName',
-                firstName: 'firstName',
-                lastName: 'lastName',
-                admin: false
-            },
-            })
-    
-    
-          cy.visit('/login')
-      
-          cy.get('input[formControlName=email]').type("yoga@studio.com")
-          cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+      cy.loginsimpleUser()
       
           cy.url().should('include', '/sessions')
           
